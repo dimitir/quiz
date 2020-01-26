@@ -9,11 +9,6 @@ import style from './quizResult.module.scss'
 
 const QuizResult = ({ quizResult, quizItems }) => {
 
-    console.group('quizResult');
-    console.group(quizResult);
-    console.group(quizItems);
-    console.groupEnd();
-
     const getCountCheckbooxResult = (userOpinion, right) => {
 
         const proportion = Math.round(100 * (1 / right.length));
@@ -44,36 +39,24 @@ const QuizResult = ({ quizResult, quizItems }) => {
                         }
 
                     case ('select'):
-                        console.group('select');
-                        console.log(rightAnswer[0]);
-                        console.log(quizResult[item.id]);
-                        console.groupEnd();
+                     
                         if (rightAnswer[0] == quizResult[item.id]) {
                             return 1;
                         }
                     case ('checkbox'):
-                        console.group('checkbox box');
-                        console.log(quizResult[item.id]);
-                        console.log(rightAnswer);
                         return getCountCheckbooxResult(quizResult[item.id], rightAnswer);
 
                     case ('text'):
-                        console.group('text');
-                        console.log(rightAnswer);
-                        console.log(quizResult[item.id]);
-                        console.groupEnd();
                         if (rightAnswer == quizResult[item.id]) {
                             return 1
                         }
 
-                    default: return 0
 
                 }
             }
         })
 
         let sumResult = amountRightAnswer.reduce((sum, current) => sum + current, 0);
-
         return sumResult;
 
     }
