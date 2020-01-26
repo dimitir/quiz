@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 import QuizListContainer from './QuizListContainer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import style from './quizAsk.module.scss';
 
 
 
@@ -16,13 +15,11 @@ class quizAsk extends React.Component {
     }
 
     render() {
-        const { error, loading, quizItems } = this.props;
+        const { error, loading, history } = this.props;
 
-     /*    console.log(quizItems.length);
+        // console.log(history);
 
-        if (typeof quizList !== 'undefined') {
-            console.log(quizList.quizRes);
-        } */
+
 
         if (error) {
             return <div > Error!{error.message} </div>;
@@ -31,21 +28,17 @@ class quizAsk extends React.Component {
             return <div > Loading... </div>;
         }
 
-        /*   let quizItemsList = quizItems.map((quiz, i) =>
-              <li key={i} > {quiz.question} </li>
-          ) */
 
 
         return (
             <>
                 <Container>
                     <Row>
-                        <Col md={{ span: 8, offset: 2 }}>
+                        <Col md={{ span: 10, offset: 1 }}>
                             <div>
-                                <h2 className={style.title}>Язык JavaScript </h2>
-                                <QuizListContainer
+                                <h2 className='titleQuiz'>Язык JavaScript </h2>
+                                <QuizListContainer history={history}
                                 />
-                                {/* { quizItemsList?<ul>{ quizItemsList }</ul> : <h1>Loading... please wait!</h1 >}   */}
                             </div>
                         </Col>
                     </Row>
@@ -57,7 +50,6 @@ class quizAsk extends React.Component {
 }
 
 const mapStateToProps = state => ({
-
     loading: state.quizFetch.loading,
     error: state.quizFetch.error,
 });

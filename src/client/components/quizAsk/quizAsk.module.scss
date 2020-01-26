@@ -1,5 +1,32 @@
-.title{
-    margin-top: 100px;
-    margin-bottom: 50px;
-    text-align: center;
+.quizList {
+    margin-bottom: 70px;
+
+    li>ul {
+        margin-bottom: 50px;
+    }
+
+
+
+
+    .quizQuestion {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .beforeInputMark {
+        margin-left: 10px;
+    }
+
+    .buttonSubmit {
+        display: block;
+        margin: auto;
+        padding: 8px 60px;
+    }
 }
+
+.buttonConfirm{
+    display: block;
+    margin: auto;
+    padding: 8px 60px;
+}
+

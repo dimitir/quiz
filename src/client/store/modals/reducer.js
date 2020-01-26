@@ -1,8 +1,8 @@
-import actionsType from './actionTypes';
+import actionsType from '../actionTypes';
 
 
 const initialState = {
-  modalSkip: false,
+  modalConfirm: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -10,12 +10,12 @@ export default function reducer(state = initialState, action) {
     case actionsType.SHOW_MODAL_CONFIRM:
       return {
         ...state,
-        modalSkip: action.obj
+        modalConfirm: action.obj
       };
     case actionsType.CLOSE_MODAL_CONFIRM:
       return {
         ...state,
-        modalSkip: action.obj
+        modalConfirm: action.obj
       };
     default:
       return state;

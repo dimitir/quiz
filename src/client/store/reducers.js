@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux';
-import modalReducer from './modals/reducer';
-import fetchingQuizReducer from './fetchingQuiz/reducer';
+import quizModalReducer from './modals/reducer';
+import quizFetchingReducer from './fetchingQuiz/reducer';
+import quizResultReducer from './resultQuiz/reducer';
 
 
 export default combineReducers({
-    modalSkip: modalReducer,
-    quizFetch: fetchingQuizReducer
+    quizModalConfirm: quizModalReducer,
+    quizFetch: quizFetchingReducer,
+    quizResult: quizResultReducer,
+
 });

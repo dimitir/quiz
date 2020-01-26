@@ -1,18 +1,15 @@
-import {
-    FETCH_QUIZ_BEGIN,
-    FETCH_QUIZ_SUCCESS,
-    FETCH_QUIZ_FAILURE
-} from './actions';
+import actionsType from '../actionTypes';
+
 
 const initialState = {
-    items: [],
+    quizFetchItems: [],
     loading: false,
     error: null
 };
 
 export default function quizReducer(state = initialState, action) {
     switch (action.type) {
-        case FETCH_QUIZ_BEGIN:
+        case actionsType.FETCH_QUIZ_BEGIN:
             // Mark the state as "loading" so we can show a spinner or something
             // Also, reset any errors. We're starting fresh.
             return {
@@ -21,16 +18,16 @@ export default function quizReducer(state = initialState, action) {
                 error: null
             };
 
-        case FETCH_QUIZ_SUCCESS:
+        case actionsType.FETCH_QUIZ_SUCCESS:
             // All done: set loading "false".
             // Also, replace the items with the ones from the server
             return {
                 ...state,
                 loading: false,
-                items: action.payload
+                quizFetchItems: action.payload
             };
 
-        case FETCH_QUIZ_FAILURE:
+        case actionsType.FETCH_QUIZ_FAILURE:
             // The request failed. It's done. So set loading to "false".
             // Save the error, so we can display it somewhere.
             // Since it failed, we don't have items to display anymore, so set `items` empty.
@@ -42,11 +39,10 @@ export default function quizReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 error: action.payload.error,
-                items: []
+                quizFetchItems: []
             };
 
         default:
-            // ALWAYS have a default case in a reducer
             return state;
     }
 }

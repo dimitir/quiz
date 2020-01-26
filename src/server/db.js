@@ -25,16 +25,16 @@ module.exports.quizList = [
     {
         id: uuid.v4(),
         type: 'select',
-        question: 'Чему равно такое выражение? \n [] + false - null + true',
+        question: 'Чему равно такое выражение? \n [ ] + false - null + true',
         answers: ['0', 'NaN', 'undefined', '1'],
-        right: ['3'],
+        right: ['1'],
     },
     {
         id: uuid.v4(),
         type: 'text',
         question: 'Что выведет код?  \n let obj = {\'1\': 0, 1: 1, 0: 2};  \n alert(obj["1"]); ',
-        answers: ['0', 'NaN', 'undefined', '1'],
-        right: ['3'],
+        answers: ['1'],
+        right: 1,
     },
     {
         id: uuid.v4(),

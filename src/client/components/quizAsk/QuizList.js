@@ -1,15 +1,23 @@
 import { withFormik, Form, Field } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import * as Yup from 'yup';
-import ModalConfirm from './ModalConfirm'
+import Button from 'react-bootstrap/Button';
+import style from './quizAsk.module.scss';
+import ModalConfirm from './ModalConfirm';
+import { Link, Redirect } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+
+
 
 
 const QuizList = ({
-    modalSkip,
+    history,
+    modalConfirm,
     showModalConfirm,
     closeModalConfirm,
     values,
     handleChange,
+    handleBlur,
     handleSubmit,
     errors,
     resetForm,
@@ -17,24 +25,18 @@ const QuizList = ({
     isSubmitting = false
 }) => {
 
-    /*     const [showWin, setShow] = useState(false);
-        const handleShow = () => setShow(true);
-        const handleClose = () => setShow(false); */
-
-
-
     let quizItemsList = values.quizItems.map((quiz, i) => {
-
+        let num = i + 1;
         if (quiz.type === 'checkbox') {
             return (
                 <li key={i} >
                     <ul>
-                        <li key={i + 'q'}>{quiz.question}</li>
+                        <li key={i + 'q'} className={style.quizQuestion}><span>{num + '. '}</span>{quiz.question}</li>
                         {quiz.answers.map((item, k) =>
                             <li key={k + 'ch'}>
                                 <label htmlFor={i + k + 'ch'}>
                                     <input type='checkbox' value={k} name={quiz.id} id={i + k + 'ch'} onChange={handleChange} />
-                                    {item}</label>
+                                    <span className={style.beforeInputMark}>{item}</span></label>
                             </li>
                         )}
                     </ul >
@@ -43,14 +45,14 @@ const QuizList = ({
         }
         if (quiz.type === 'radio') {
             return (
-                <li key={i} >
+                <li key={i} className={style.quizItem}>
                     <ul>
-                        <li key={i + 'q'}>{quiz.question}</li>
-                        {quiz.answers.map((item, n) =>
-                            <li key={n}>
-                                {touched.password && errors.password && <p>{errors.password}</p>}
-                                <input type='radio' name={quiz.id} value={n} onChange={handleChange} />
-                                {item}
+                        <li key={i + 'q'} className={style.quizQuestion}>{num + '. '}{quiz.question}</li>
+                        {quiz.answers.map((item, k) =>
+                            <li key={k + 'r'}>
+                                <label htmlFor={i + k + 'r'}>
+                                    <input type='radio' name={quiz.id} value={k} id={i + k + 'r'} onChange={handleChange} />
+                                    <span className={style.beforeInputMark}>{item}</span></label>
                             </li>
                         )}
                     </ul >
@@ -61,12 +63,23 @@ const QuizList = ({
             return (
                 <li key={i} >
                     <ul>
-                        <li key={i + 'q'}>{quiz.question}</li>
+                        <li key={i + 'q'} className={style.quizQuestion}>{num + '. '}{quiz.question}</li>
                         <Field name={quiz.id} as="select" >
                             <option value='' key={i + 's'} label='Сделайте выбор' />
                             {quiz.answers.map((item, k) => <option value={k} key={k} label={item} />
                             )}
                         </Field>
+                    </ul >
+                </li >
+            )
+        }
+
+        if (quiz.type === 'text') {
+            return (
+                <li key={i} >
+                    <ul>
+                        <li key={i + 'q'} className={style.quizQuestion}>{num + '. '}{quiz.question}</li>
+                        <input type='text' placeholder='Введите значение' name={quiz.id} value={values.name} onChange={handleChange} onBlur={handleBlur} />
                     </ul >
                 </li >
             )
@@ -78,45 +91,72 @@ const QuizList = ({
     return (
         <>
             <ModalConfirm
-                show={modalSkip.modalSkip}
-                handleClose={() => closeModalConfirm(false)}
+                show={modalConfirm.modalConfirm}
+                handleClose={() => closeModalConfirm()}
             />
-
-            <Form onSubmit={handleSubmit}>
-                {quizItemsList ? <>{quizItemsList}</> : <h1>Loading... please wait!</h1 >}
-
-
-
-                <button type="button" onClick={() => showModalConfirm(true)}>modal</button>
-                <button type="submit" disabled={isSubmitting}>Send</button>
-
+            <Form onSubmit={handleSubmit} className={style.quizList}>
+                {quizItemsList ? <ul>{quizItemsList}</ul> : <h1>Loading... please wait!</h1 >}
+                <Button type="submit" className={`${style.buttonSubmit}`}>
+                    Send</Button>
             </Form>
-
+            <Link to='/result'>Sing up</Link>
         </>
 
     );
 }
 
 
-const formikApp = withFormik({
-    mapPropsToValues({ quizItems, modalSkip, showModalConfirm, closeModalConfirm }) {
+const getResultValues = (listQuiz, listValuesRecently) => {
+    let resultValues = {};
+    const listQuizId = listQuiz.map(item => item.id);
+    for (let key in listValuesRecently) {
+        if (listQuizId.indexOf(key) != -1) {
+            resultValues[key] = listValuesRecently[key];
+        }
+    }
+    return resultValues
+}
 
+
+const isFieldAllFill = (listQuiz, listValuesRecently) => {
+    const listQuizId = listQuiz.map(item => item.id);
+    const listRecently = listQuizId.filter(item => listValuesRecently.hasOwnProperty(item));
+    if (listQuizId.length === listRecently.length) {
+        return true
+    }
+    else return false
+}
+
+
+const quizAskContainer = withFormik({
+    mapPropsToValues({ history, quizItems, showModalConfirm, closeModalConfirm, saveResult, modalConfirm, props }) {
         return {
+            history,
+            modalConfirm,
             quizItems,
-            modalSkip,
             showModalConfirm,
-            closeModalConfirm
+            closeModalConfirm,
+            saveResult
         }
     },
-    handleSubmit({ showModalConfirm, setSubmitting, resetForm }) {
+    handleSubmit(values) {
+        // save result quiz in redux
+        const resultValues = getResultValues(values.quizItems, values);
 
-        setTimeout(() => {
-            setSubmitting(false);
-            resetForm();
-        }, 1000);
+        //check is all field fill
+        values.saveResult(resultValues);
+
+        if (!isFieldAllFill(values.quizItems, values)) {
+            values.showModalConfirm()
+        }
+        else {
+            values.history.push('/result');
+        }
+
 
     }
 
 })(QuizList);
 
-export default formikApp;
+export default quizAskContainer;
+
