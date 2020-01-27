@@ -2,7 +2,7 @@ import actionsType from '../actionTypes';
 
 
 const initialState = {
-  modalConfirm: false,
+  modalConfirmVal: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -10,12 +10,12 @@ export default function reducer(state = initialState, action) {
     case actionsType.SHOW_MODAL_CONFIRM:
       return {
         ...state,
-        modalConfirm: action.obj
+        modalConfirmVal: action.obj
       };
     case actionsType.CLOSE_MODAL_CONFIRM:
       return {
         ...state,
-        modalConfirm: action.obj
+        modalConfirmVal: action.obj
       };
     default:
       return state;

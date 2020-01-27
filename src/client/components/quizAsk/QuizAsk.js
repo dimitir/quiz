@@ -1,14 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
-import { fetchQuiz } from "../../store/fetchingQuiz/actions";
 import Container from 'react-bootstrap/Container';
 import QuizListContainer from './QuizListContainer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import PropTypes from 'prop-types';
 
 
-
-class quizAsk extends React.Component {
+export default class QuizAsk extends React.Component {
 
     componentDidMount() {
         this.props.fetchQuizList();
@@ -16,9 +14,6 @@ class quizAsk extends React.Component {
 
     render() {
         const { error, loading, history } = this.props;
-
-        // console.log(history);
-
 
 
         if (error) {
@@ -49,15 +44,13 @@ class quizAsk extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    loading: state.quizFetch.loading,
-    error: state.quizFetch.error,
-});
 
-const mapDispatchToProps = (dispatch) => (
-    {
-        fetchQuizList: () => dispatch(fetchQuiz())
-    }
-)
 
-export default connect(mapStateToProps, mapDispatchToProps)(quizAsk);
+QuizAsk.propTypes = {
+    fetchQuizList: PropTypes.func,
+    QuizListContainer: PropTypes.element,
+    history: PropTypes.object,
+    loading: PropTypes.bool,
+    error: PropTypes.bool,
+}
+

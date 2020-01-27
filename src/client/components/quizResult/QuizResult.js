@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import style from './quizResult.module.scss'
+import style from './quizResult.module.scss';
 
 
 
@@ -39,7 +39,6 @@ const QuizResult = ({ quizResult, quizItems }) => {
                         }
 
                     case ('select'):
-                     
                         if (rightAnswer[0] == quizResult[item.id]) {
                             return 1;
                         }
@@ -47,16 +46,17 @@ const QuizResult = ({ quizResult, quizItems }) => {
                         return getCountCheckbooxResult(quizResult[item.id], rightAnswer);
 
                     case ('text'):
-                        if (rightAnswer == quizResult[item.id]) {
+                        let resultTextNum = Number(quizResult[item.id]);
+                        if (rightAnswer === resultTextNum) {
                             return 1
                         }
-
-
+                    default: return 0;
                 }
             }
         })
 
         let sumResult = amountRightAnswer.reduce((sum, current) => sum + current, 0);
+
         return sumResult;
 
     }
@@ -65,12 +65,7 @@ const QuizResult = ({ quizResult, quizItems }) => {
 
 
     const percentage = () => {
-
-        // console.log(sumRightAnswer);
-        const proportion = 100 * (sumRightAnswer() / (quizItems.length));
-        console.log(proportion);
-
-        return proportion;
+        return 100 * (sumRightAnswer() / (quizItems.length));
     }
 
 
@@ -83,7 +78,7 @@ const QuizResult = ({ quizResult, quizItems }) => {
                         <h2 className='titleQuiz'>Ваш результат</h2>
                         <Row className="justify-content-md-center">
                             <div className={style.resultStats}>
-                                <h4 className={style.resultStats}>Вы правильно ответили на {percentage()}% вопросов</h4>
+                                <h4>Вы правильно ответили на {percentage()}% вопросов</h4>
                                 <h4>Из {quizItems.length}, правильно ответили на {sumRightAnswer()} </h4>
                             </div>
                         </Row>

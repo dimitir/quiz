@@ -11,7 +11,7 @@ import { saveResult } from '../../store/resultQuiz/actions';
 const mapStateToProps = (state, { history }) => {
     return ({
         quizItems: state.quizFetch.quizFetchItems,
-        modalConfirm: state.quizModalConfirm,
+        modalConfirm: state.quizModalConfirm.modalConfirmVal,
         history
     });
 }

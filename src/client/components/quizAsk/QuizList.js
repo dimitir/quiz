@@ -1,16 +1,15 @@
 import { withFormik, Form, Field } from 'formik';
 import React from 'react';
-import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import style from './quizAsk.module.scss';
 import ModalConfirm from './ModalConfirm';
-import { Link, Redirect } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 
 
 
 const QuizList = ({
+    quizItem,
     history,
     modalConfirm,
     showModalConfirm,
@@ -20,9 +19,6 @@ const QuizList = ({
     handleBlur,
     handleSubmit,
     errors,
-    resetForm,
-    touched,
-    isSubmitting = false
 }) => {
 
     let quizItemsList = values.quizItems.map((quiz, i) => {
@@ -91,15 +87,14 @@ const QuizList = ({
     return (
         <>
             <ModalConfirm
-                show={modalConfirm.modalConfirm}
+                show={modalConfirm}
                 handleClose={() => closeModalConfirm()}
             />
             <Form onSubmit={handleSubmit} className={style.quizList}>
                 {quizItemsList ? <ul>{quizItemsList}</ul> : <h1>Loading... please wait!</h1 >}
                 <Button type="submit" className={`${style.buttonSubmit}`}>
-                    Send</Button>
+                    Ответить</Button>
             </Form>
-            <Link to='/result'>Sing up</Link>
         </>
 
     );
@@ -128,8 +123,8 @@ const isFieldAllFill = (listQuiz, listValuesRecently) => {
 }
 
 
-const quizAskContainer = withFormik({
-    mapPropsToValues({ history, quizItems, showModalConfirm, closeModalConfirm, saveResult, modalConfirm, props }) {
+const quizListFormicCont = withFormik({
+    mapPropsToValues({ history, quizItems, showModalConfirm, closeModalConfirm, saveResult, modalConfirm }) {
         return {
             history,
             modalConfirm,
@@ -140,10 +135,8 @@ const quizAskContainer = withFormik({
         }
     },
     handleSubmit(values) {
-        // save result quiz in redux
         const resultValues = getResultValues(values.quizItems, values);
 
-        //check is all field fill
         values.saveResult(resultValues);
 
         if (!isFieldAllFill(values.quizItems, values)) {
@@ -152,11 +145,22 @@ const quizAskContainer = withFormik({
         else {
             values.history.push('/result');
         }
-
-
     }
 
 })(QuizList);
 
-export default quizAskContainer;
+
+
+QuizList.propTypes = {
+    ModalConfirm: PropTypes.element,
+    history: PropTypes.object,
+    quizItems: PropTypes.array,
+    showModalConfirm: PropTypes.func,
+    closeModalConfirm: PropTypes.func,
+    saveResult: PropTypes.func,
+    modalConfirm: PropTypes.bool,
+}
+
+
+export default quizListFormicCont;
 

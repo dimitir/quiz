@@ -1,7 +1,5 @@
 const uuid = require('uuid');
 
-// in fill right arr srart from 0
-// right answer it is order of the place in the array question
 module.exports.quizList = [
     {
         id: uuid.v4(),

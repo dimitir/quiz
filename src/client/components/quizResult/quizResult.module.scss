@@ -1,8 +1,5 @@
 .resultStats {
-    display: block;
-    margin: auto;
-
-    h4 {
-        // text-align: center;
+    h4:first-child{
+        margin-bottom: 10px;
     }
 }
