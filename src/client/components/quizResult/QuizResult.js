@@ -65,7 +65,7 @@ const QuizResult = ({ quizResult, quizItems }) => {
 
 
     const percentage = () => {
-        return 100 * (sumRightAnswer() / (quizItems.length));
+        return Math.round(100 * (sumRightAnswer() / (quizItems.length)));
     }
 
 
