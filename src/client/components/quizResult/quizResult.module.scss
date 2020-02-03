@@ -1,5 +1,49 @@
 .resultStats {
-    h4:first-child{
+    h4:first-child {
         margin-bottom: 10px;
+    }
+}
+
+.showQuizResult {
+    margin-bottom: 70px;
+
+    h4{
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    li>ul {
+        margin-bottom: 50px;
+    }
+
+
+
+
+    .quizQuestion {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .beforeInputMark {
+        margin-left: 10px;
+
+    }
+
+    .reightAnswer {
+        margin-left: 10px;
+        color: black;
+        font-weight: 600;
+    }
+
+    .userAnswer  {
+        margin-left: 10px;
+        color: red;
+        font-weight: 600;
+    }
+
+    .buttonSubmit {
+        display: block;
+        margin: auto;
+        padding: 8px 60px;
     }
 }
