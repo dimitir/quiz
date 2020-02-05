@@ -109,8 +109,20 @@ const getResultValues = (listQuiz, listValuesRecently) => {
             resultValues[key] = listValuesRecently[key];
         }
     }
+
     return resultValues
 }
+
+
+const doTypeCasting = resultVal => {
+    for (const itemResult in resultVal) {
+        if (typeof resultVal[itemResult] == 'object') {
+            resultVal[itemResult] = resultVal[itemResult].map(val => Number(val));
+        }
+    }
+    return resultVal;
+}
+
 
 
 const isFieldAllFill = (listQuiz, listValuesRecently) => {
@@ -136,7 +148,9 @@ const quizListFormicCont = withFormik({
     },
     handleSubmit(values) {
         const resultValues = getResultValues(values.quizItems, values);
-
+        const resultValuesTypeCast = doTypeCasting(resultValues);
+        console.group('resultCasting');
+        console.log(resultValuesTypeCast);
         values.saveResult(resultValues);
 
         if (!isFieldAllFill(values.quizItems, values)) {

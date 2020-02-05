@@ -8,8 +8,6 @@ import style from './quizResult.module.scss';
 
 
 const QuizResult = ({ quizResult, quizItems }) => {
-
-
     const setRightResult = () => {
         for (const itemQuiz of quizItems) {
             if (itemQuiz.type == 'checkbox') {
@@ -22,7 +20,6 @@ const QuizResult = ({ quizResult, quizItems }) => {
                     for (const itemTrueAnswer of itemQuiz.right) {
                         if (itemInput.value == itemTrueAnswer) {
                             const textAfterInput = itemInput.nextSibling;
-                            console.log(textAfterInput);
                             textAfterInput.innerHTML = "My First JavaScript"
                             // itemInput.nextSibling.style.fontWeight = "900";
                             // ;
@@ -57,6 +54,9 @@ const QuizResult = ({ quizResult, quizItems }) => {
         const amountRightAnswer = quizItems.map(item => {
             const rightAnswer = item.right;
 
+            console.group(typeof quizResult[item.id]);
+            console.groupEnd();
+
             if (!quizResult.hasOwnProperty(item.id)) {
                 return 0
             }
@@ -78,7 +78,7 @@ const QuizResult = ({ quizResult, quizItems }) => {
                     case ('text'):
                         console.log(quizResult[item.id]);
                         let resultTextNum = Number(quizResult[item.id]);
-                        if (rightAnswer === resultTextNum) {
+                        if (rightAnswer[0] === resultTextNum) {
                             return 1
                         }
                     default: return 0;
@@ -99,9 +99,58 @@ const QuizResult = ({ quizResult, quizItems }) => {
         return Math.round(100 * (sumRightAnswer() / (quizItems.length)));
     }
 
+    const printItemResult = () => {
+
+        let resultItems = quizItems;
+        for (let quizOne of resultItems) {
+            quizOne.printDifferent = [];
+            if (quizOne.type === 'radio' || quizOne.type === 'select') {
+                quizOne.printDifferent = quizOne.answers.map((item, k) => {
+                    if ((quizOne.right.includes(k) && quizResult[quizOne.id] && !quizResult[quizOne.id].includes(k)) ||
+                        quizOne.right.includes(k) && !quizResult[quizOne.id]) {
+                        return 'right'
+                    }
+                    else if (quizResult[quizOne.id] && quizResult[quizOne.id].includes(k) && quizOne.right.includes(k)) {
+                        return 'rightUser'
+                    }
+
+                    else if (quizResult[quizOne.id] && quizResult[quizOne.id].includes(k) && !quizOne.right.includes(k)) {
+                        return 'misUser'
+                    }
+                    else return 'regular'
+                }
+                )
+
+            }
+            if (quizOne.type === 'checkbox') {
+                quizOne.printDifferent = quizOne.answers.map((item, k) => {
+                    if (quizOne.right.includes(k) && quizResult[quizOne.id] && !quizResult[quizOne.id].includes(k)) {
+                        return 'right'
+                    }
+                    else if (quizOne.right.includes(k) && quizResult[quizOne.id] && quizResult[quizOne.id].includes(k)) {
+                        return 'rightUser'
+                    }
+                    else if (quizResult[quizOne.id] && quizResult[quizOne.id].includes(k) && !quizOne.right.includes(k)) {
+                        console.group(quizResult[quizOne.id]);
+                        console.log(k);
+                        return 'misUser'
+                    }
+                    else return 'regular'
+                }
+                )
+
+            }
+
+            console.log(resultItems);
+
+        }
 
 
-    let quizItemsList = quizItems.map((quiz, i) => {
+
+    }
+
+
+    const quizItemsList = quizItems.map((quiz, i) => {
 
         let num = i + 1;
         if (quiz.type === 'checkbox') {
@@ -159,8 +208,12 @@ const QuizResult = ({ quizResult, quizItems }) => {
             return (
                 <li key={i} >
                     <ul>
-                        <li key={i + 'q'} className={style.quizQuestion}>{num + '. '}{quiz.question}</li>
-                        <input type='text' placeholder='Введите значение' name={quiz.id} />
+                        <li key={i + 't'} className={style.quizQuestion}>{num + '. '}{quiz.question}</li>
+                        {quizResult[quiz.id] && quizResult[quiz.id] == quiz.right ? (
+                            <li key={i + 'tRight'}>Ваш ответ верен: {quiz.right}</li>
+                        ) : quizResult[quiz.id] && quizResult[quiz.id] !== quiz.right ? (
+                            <li key={i + 'tFalse'}>Ваш ответ не верен:  </li>
+                        ) : (<li key={i + 'tNoOne'}> вы не дали ответ</li>)}
                     </ul >
                 </li >
             )
@@ -184,6 +237,7 @@ const QuizResult = ({ quizResult, quizItems }) => {
                                 <h4>Ответы</h4>
                                 {quizItemsList}
                                 {setRightResult()}
+                                {printItemResult()}
                             </div>
                         </Row>
                     </Col>

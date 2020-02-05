@@ -6,7 +6,7 @@
     "scripts": {
         "bld": "webpack --mode production",
         "start": "npm run build && node src/server/index.js",
-        "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
+        "client": "webpack-dev-server --mode development --devtool inline-source-map ",
         "server": "nodemon src/server/index.js",
         "dev": "concurrently \"npm run server\" \"npm run client\""
     },
@@ -64,3 +64,5 @@
         "webpack-dev-server": "^3.10.1"
     }
 }
+
+ 

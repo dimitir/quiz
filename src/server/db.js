@@ -31,8 +31,8 @@ module.exports.quizList = [
         id: uuid.v4(),
         type: 'text',
         question: 'Что выведет код?  \n let obj = {\'1\': 0, 1: 1, 0: 2};  \n alert(obj["1"]); ',
-        answers: ['1'],
-        right: [0],
+        answers: [],
+        right: [1],
     },
     {
         id: uuid.v4(),
